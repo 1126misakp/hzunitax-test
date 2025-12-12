@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import FileUpload from './components/FileUpload';
 import Processing from './components/Processing';
@@ -8,26 +8,46 @@ import { AppState, FileData, FileMapping } from './types';
 import { AlertCircle, X } from 'lucide-react';
 import { REPORT_DOWNLOAD_URL, COPYRIGHT_TEXT } from './constants';
 
+const STORAGE_KEY = 'unitax_audit_mappings';
+
 const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>(AppState.IDLE);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [processingDuration, setProcessingDuration] = useState<number>(0);
   const [uploadedSimpleName, setUploadedSimpleName] = useState<string>('');
   
-  // Configuration State
+  // Configuration State with LocalStorage Persistence
   const [isConfigOpen, setIsConfigOpen] = useState(false);
-  const [mappings, setMappings] = useState<FileMapping[]>([
-    {
-      id: 'default-1',
-      uploadName: '测试1',
-      downloads: [
-        {
-          name: '报告1.doc',
-          url: REPORT_DOWNLOAD_URL
-        }
-      ]
+  
+  const [mappings, setMappings] = useState<FileMapping[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.warn('Failed to parse mappings from local storage', e);
     }
-  ]);
+    
+    // Default initial state if no storage found
+    return [
+      {
+        id: 'default-1',
+        uploadName: '测试1',
+        downloads: [
+          {
+            name: '报告1.doc',
+            url: REPORT_DOWNLOAD_URL
+          }
+        ]
+      }
+    ];
+  });
+
+  // Persist mappings changes to localStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(mappings));
+  }, [mappings]);
 
   const handleFileSelect = (file: FileData) => {
     setUploadedSimpleName(file.simpleName);
