@@ -1,7 +1,7 @@
 
 export const APP_NAME = "尤尼泰自动审计报告助手";
 export const APP_VERSION = "v2.5.0-Enterprise";
-export const COPYRIGHT_TEXT = "© 2024 UniTax Certified Tax Agents Co., Ltd. All rights reserved.";
+export const COPYRIGHT_TEXT = "© 2025 HangzhouUniTax Co., Ltd. All rights reserved.";
 
 export const REPORT_DOWNLOAD_URL = "https://aimilmguliansaycjecy.supabase.co/storage/v1/object/public/WeeklyReport_on_Zero-CarbonParkConstruction/report-1.pdf";
 
