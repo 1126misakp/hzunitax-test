@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Download, FileCheck, CheckCircle, RefreshCcw, Loader2, AlertCircle } from 'lucide-react';
-import { FileMapping } from '../types';
+import { Download, FileCheck, CheckCircle, RefreshCcw, Loader2, AlertCircle, FileText } from 'lucide-react';
+import { FileMapping, DownloadConfig } from '../types';
 
 interface ResultViewProps {
   onReset: () => void;
@@ -10,7 +10,7 @@ interface ResultViewProps {
 }
 
 const ResultView: React.FC<ResultViewProps> = ({ onReset, processingDuration, uploadedSimpleName, mappings }) => {
-  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadingUrl, setDownloadingUrl] = useState<string | null>(null);
   const [targetMapping, setTargetMapping] = useState<FileMapping | undefined>(undefined);
 
   useEffect(() => {
@@ -18,20 +18,18 @@ const ResultView: React.FC<ResultViewProps> = ({ onReset, processingDuration, up
     setTargetMapping(mapping);
   }, [uploadedSimpleName, mappings]);
   
-  const handleDownload = async () => {
-    if (!targetMapping) return;
-    
-    setIsDownloading(true);
+  const handleDownload = async (file: DownloadConfig) => {
+    setDownloadingUrl(file.url);
     try {
       // Fetch the remote file to create a blob for proper naming
-      const response = await fetch(targetMapping.downloadUrl);
+      const response = await fetch(file.url);
       if (!response.ok) throw new Error('Download failed');
       
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = targetMapping.downloadName; 
+      link.download = file.name; 
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -39,9 +37,9 @@ const ResultView: React.FC<ResultViewProps> = ({ onReset, processingDuration, up
     } catch (error) {
       console.error("Download failed, opening directly", error);
       // Fallback: open in new tab if blob creation fails (e.g. CORS issues)
-      window.open(targetMapping.downloadUrl, '_blank');
+      window.open(file.url, '_blank');
     } finally {
-      setIsDownloading(false);
+      setDownloadingUrl(null);
     }
   };
 
@@ -74,28 +72,40 @@ const ResultView: React.FC<ResultViewProps> = ({ onReset, processingDuration, up
         </div>
 
         <div className="p-8 sm:p-10">
-          <div className="flex flex-col md:flex-row items-center justify-between bg-gray-50 rounded-2xl p-6 border border-gray-100 mb-8">
-            <div className="flex items-center space-x-4 mb-4 md:mb-0">
-              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-red-600">
-                <FileCheck className="w-7 h-7" />
-              </div>
-              <div>
-                <h4 className="text-lg font-bold text-gray-900">{targetMapping.downloadName}</h4>
-                <p className="text-sm text-gray-500">自动生成的企业所得税审核报告</p>
-              </div>
+          
+          <div className="mb-6">
+            <h4 className="text-gray-900 font-bold text-lg mb-4 flex items-center">
+              <FileText className="w-5 h-5 mr-2 text-brand-600" />
+              生成结果文档 ({targetMapping.downloads.length})
+            </h4>
+            
+            <div className="space-y-4">
+              {targetMapping.downloads.map((file, idx) => (
+                <div key={idx} className="flex flex-col md:flex-row items-center justify-between bg-gray-50 rounded-2xl p-5 border border-gray-100 hover:border-brand-200 hover:shadow-md transition-all">
+                  <div className="flex items-center space-x-4 mb-4 md:mb-0 w-full md:w-auto overflow-hidden">
+                    <div className="w-10 h-10 flex-shrink-0 bg-red-100 rounded-lg flex items-center justify-center text-red-600">
+                      <FileCheck className="w-6 h-6" />
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="text-base font-bold text-gray-900 truncate pr-2" title={file.name}>{file.name}</h4>
+                      <p className="text-xs text-gray-500">审计报告文件</p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={() => handleDownload(file)}
+                    disabled={downloadingUrl !== null}
+                    className="w-full md:w-auto flex-shrink-0 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl shadow-lg hover:shadow-brand-500/30 transition-all flex items-center justify-center font-semibold text-sm disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {downloadingUrl === file.url ? (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <Download className="w-4 h-4 mr-2" />
+                    )}
+                    {downloadingUrl === file.url ? '下载中...' : '下载文件'}
+                  </button>
+                </div>
+              ))}
             </div>
-            <button 
-              onClick={handleDownload}
-              disabled={isDownloading}
-              className="w-full md:w-auto px-6 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl shadow-lg hover:shadow-brand-500/30 transition-all flex items-center justify-center font-semibold disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {isDownloading ? (
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              ) : (
-                <Download className="w-5 h-5 mr-2" />
-              )}
-              {isDownloading ? '下载中...' : '立即下载'}
-            </button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
