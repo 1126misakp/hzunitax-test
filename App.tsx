@@ -126,7 +126,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="w-full py-6 text-center text-slate-400 text-sm">
-        <p>&copy; 2024 UniTax Certified Tax Agents Co., Ltd. All rights reserved.</p>
+        <p>&copy; 2025 HangzhouUniTax Co., Ltd. All rights reserved.</p>
       </footer>
     </div>
   );
