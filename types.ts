@@ -19,9 +19,13 @@ export interface ProcessStep {
   status: 'pending' | 'active' | 'completed';
 }
 
+export interface DownloadConfig {
+  name: string;
+  url: string;
+}
+
 export interface FileMapping {
   id: string;
   uploadName: string;   // e.g. "测试1"
-  downloadName: string; // e.g. "报告1.pdf"
-  downloadUrl: string;  // e.g. "https://..."
+  downloads: DownloadConfig[]; // Array of up to 3 files
 }
