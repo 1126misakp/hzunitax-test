@@ -6,7 +6,7 @@ import ResultView from './components/ResultView';
 import ConfigModal from './components/ConfigModal';
 import { AppState, FileData, FileMapping } from './types';
 import { AlertCircle, X } from 'lucide-react';
-import { REPORT_DOWNLOAD_URL } from './constants';
+import { REPORT_DOWNLOAD_URL, COPYRIGHT_TEXT } from './constants';
 
 const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>(AppState.IDLE);
@@ -20,8 +20,12 @@ const App: React.FC = () => {
     {
       id: 'default-1',
       uploadName: '测试1',
-      downloadName: '报告1.pdf',
-      downloadUrl: REPORT_DOWNLOAD_URL
+      downloads: [
+        {
+          name: '报告1.doc',
+          url: REPORT_DOWNLOAD_URL
+        }
+      ]
     }
   ]);
 
@@ -126,7 +130,7 @@ const App: React.FC = () => {
       </main>
 
       <footer className="w-full py-6 text-center text-slate-400 text-sm">
-        <p>&copy; 2025 HangzhouUniTax Co., Ltd. All rights reserved.</p>
+        <p>{COPYRIGHT_TEXT}</p>
       </footer>
     </div>
   );
