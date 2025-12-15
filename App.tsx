@@ -21,21 +21,21 @@ const App: React.FC = () => {
   const [mappings, setMappings] = useState<FileMapping[]>([
     {
       id: 'rule-1',
-      uploadName: '副本CF-C-4企业所得税申报表新版-2024江苏富乐德',
+      uploadName: '测试3',
       downloads: [
         {
           name: '申报审核报告说明.docx',
-          url: 'https://aimilmguliansaycjecy.supabase.co/storage/v1/object/public/WeeklyReport_on_Zero-CarbonParkConstruction/CF-C-2.doc'
+          url: 'https://aimilmguliansaycjecy.supabase.co/storage/v1/object/public/WeeklyReport_on_Zero-CarbonParkConstruction/shbgsm-fdl.doc'
         },
         {
           name: '申报审核报告.docx',
-          url: 'https://aimilmguliansaycjecy.supabase.co/storage/v1/object/public/WeeklyReport_on_Zero-CarbonParkConstruction/CF-C-1.docx'
+          url: 'https://aimilmguliansaycjecy.supabase.co/storage/v1/object/public/WeeklyReport_on_Zero-CarbonParkConstruction/shbg-fdl.docx'
         }
       ]
     },
     {
       id: 'rule-2',
-      uploadName: '企业所得税申报表-中节能实业2021年度',
+      uploadName: '测试2',
       downloads: [
         {
           name: '申报审核报告说明.docx',
@@ -49,7 +49,7 @@ const App: React.FC = () => {
     },
     {
       id: 'rule-3',
-      uploadName: 'CF-C-3企业所得税申报表-中国空分5.15',
+      uploadName: '测试1',
       downloads: [
         {
           name: '申报审核报告说明.docx',
@@ -58,6 +58,20 @@ const App: React.FC = () => {
         {
           name: '申报审核报告.docx',
           url: 'https://aimilmguliansaycjecy.supabase.co/storage/v1/object/public/WeeklyReport_on_Zero-CarbonParkConstruction/shbg-kf.docx'
+        }
+      ]
+    },
+    {
+      id: 'rule-4',
+      uploadName: '副本CF-C-4企业所得税申报表-2024越来越好有限公司',
+      downloads: [
+        {
+          name: '申报审核报告说明.docx',
+          url: 'https://aimilmguliansaycjecy.supabase.co/storage/v1/object/public/WeeklyReport_on_Zero-CarbonParkConstruction/shsm111-ylyh.docx'
+        },
+        {
+          name: '申报审核报告.docx',
+          url: 'https://aimilmguliansaycjecy.supabase.co/storage/v1/object/public/WeeklyReport_on_Zero-CarbonParkConstruction/shsmbg-ylyh.docx'
         }
       ]
     }
